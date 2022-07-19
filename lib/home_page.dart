@@ -40,7 +40,6 @@ class _MyHomePageState extends State<MyHomePage> {
   /* ---------------- VARIABLES ---------------- */
   List<Icon> scoreKeeper = [];
 
-  int questionNumber = 0;
   /* ---------------- FUNCTIONS ---------------- */
 
   /* ---------------- LAYOUT ---------------- */
@@ -62,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: const EdgeInsets.all(10.0),
               child: Center(
                 child: Text(
-                  quizBrain.questionBank[questionNumber].questionText,
+                  quizBrain.getQuestionText(),
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 25.0,
@@ -88,8 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 onPressed: () {
                   //The user picked true.
-                  bool correctAnswer =
-                      quizBrain.questionBank[questionNumber].questionAnswer;
+                  bool correctAnswer = quizBrain.getQuestionAnswer();
                   if (correctAnswer == true) {
                     if (kDebugMode) {
                       print("Got it");
@@ -100,12 +98,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     }
                   }
                   setState(() {
-                    questionNumber++;
+                    quizBrain.nextQuestion();
                   });
 
                   if (kDebugMode) {
                     print("True");
-                    print(questionNumber);
                   }
                 },
               ),
@@ -127,8 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 onPressed: () {
                   //The user picked false.
-                  bool correctAnswer =
-                      quizBrain.questionBank[questionNumber].questionAnswer;
+                  bool correctAnswer = quizBrain.getQuestionAnswer();
                   if (correctAnswer == false) {
                     if (kDebugMode) {
                       print("Got it");
@@ -139,12 +135,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     }
                   }
                   setState(() {
-                    questionNumber++;
+                    quizBrain.nextQuestion();
                   });
 
                   if (kDebugMode) {
                     print("False");
-                    print(questionNumber);
                   }
                 },
               ),
@@ -159,9 +154,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-/*
-* q1: You can lead a cow down stairs but not up stairs. - false
-* q2: Approximately one quarter of human bones are in the feet. - true
-* q3: A slug\'s blood is green. - true
-*
-* */
