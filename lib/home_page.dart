@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:quizzler/quiz_brain.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 /* ------------------------------ CLASS [CALLS] ------------------------------ */
 QuizBrain quizBrain = QuizBrain();
@@ -41,6 +42,65 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Icon> scoreKeeper = [];
 
   /* ---------------- FUNCTIONS ---------------- */
+  void checkAnswer(bool userPickedAnswer) {
+    bool correctAnswer = quizBrain.getQuestionAnswer();
+
+    setState(
+      () {
+        //TODO: Step 4 - Use IF/ELSE to check if we've reached the end of the quiz. If so, show and alert using rFlutter_alert, reset the questionNumber, empty out the scoreKeeper.
+        //On the next line, you can also use if (quizBrain.isFinished()) {}, it does the same thing.
+
+        if (quizBrain.isFinished() == true) {
+          Alert(
+            context: context,
+            type: AlertType.info,
+            title: "Finished!",
+            desc: "You've reached the end of the Quiz",
+            buttons: [
+              DialogButton(
+                onPressed: () => Navigator.pop(context),
+                width: 120,
+                child: const Text(
+                  "Back",
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+              )
+            ],
+          ).show();
+          // Reset the questionNumber
+          quizBrain.reset();
+          // Empty out the scoreKeeper
+          scoreKeeper = [];
+        }
+        //TODO: Step 6 - If we've not reached the end, ELSE do the answer checking steps below 👇
+        else {
+          if (userPickedAnswer == correctAnswer) {
+            if (kDebugMode) {
+              print("Got it RIGHT");
+              scoreKeeper.add(
+                const Icon(
+                  Icons.check,
+                  color: Colors.green,
+                ),
+              );
+            }
+          } else {
+            if (kDebugMode) {
+              print("Got it WRONG");
+              scoreKeeper.add(
+                const Icon(
+                  Icons.close,
+                  color: Colors.red,
+                ),
+              );
+            }
+          }
+
+          quizBrain.nextQuestion();
+        }
+      },
+    );
+  }
 
   /* ---------------- LAYOUT ---------------- */
   @override
@@ -87,23 +147,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 onPressed: () {
                   //The user picked true.
-                  bool correctAnswer = quizBrain.getQuestionAnswer();
-                  if (correctAnswer == true) {
-                    if (kDebugMode) {
-                      print("Got it");
-                    }
-                  } else {
-                    if (kDebugMode) {
-                      print("Nope");
-                    }
-                  }
-                  setState(() {
-                    quizBrain.nextQuestion();
-                  });
-
-                  if (kDebugMode) {
-                    print("True");
-                  }
+                  checkAnswer(true);
                 },
               ),
             ),
@@ -124,23 +168,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 onPressed: () {
                   //The user picked false.
-                  bool correctAnswer = quizBrain.getQuestionAnswer();
-                  if (correctAnswer == false) {
-                    if (kDebugMode) {
-                      print("Got it");
-                    }
-                  } else {
-                    if (kDebugMode) {
-                      print("Nope");
-                    }
-                  }
-                  setState(() {
-                    quizBrain.nextQuestion();
-                  });
-
-                  if (kDebugMode) {
-                    print("False");
-                  }
+                  checkAnswer(false);
                 },
               ),
             ),

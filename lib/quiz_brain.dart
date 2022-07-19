@@ -51,4 +51,18 @@ class QuizBrain {
   bool getQuestionAnswer() {
     return _questionBank[_questionNumber].questionAnswer;
   }
+
+  //TODO: Step 3 - Create a method called isFinished() here that checks to see if we are at the end of the quiz.
+  bool isFinished() {
+    if (_questionNumber >= _questionBank.length - 1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  //TODO: Step 5 - Create a reset() method here that sets the questionNumber back to 0.
+  void reset() {
+    _questionNumber = 0;
+  }
 }
